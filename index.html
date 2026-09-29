@@ -1,0 +1,2673 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Python Notes: Basic to Advanced Masterclass</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        pyblue: '#306998',
+                        pyyellow: '#FFE873',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        code, pre, .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* Code highlight colors */
+        .py-keyword { color: #f472b6; font-weight: 600; }
+        .py-func { color: #38bdf8; font-weight: 600; }
+        .py-str { color: #4ade80; }
+        .py-num { color: #fbbf24; }
+        .py-comment { color: #94a3b8; font-style: italic; }
+        .py-op { color: #c084fc; }
+        .py-class { color: #fb7185; font-weight: 600; }
+        
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(56, 189, 248, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-brand-500 selection:text-white relative overflow-x-hidden">
+
+    <!-- Reading Progress Bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-400 z-50 transition-all duration-150 w-0"></div>
+
+    <!-- Background Ambient Glows -->
+    <div class="fixed -top-40 -left-40 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+    <div class="fixed top-1/2 -right-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+    <div class="fixed -bottom-40 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Logo & Brand -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-sky-500/20">
+                    <i class="fa-brands fa-python"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold bg-gradient-to-r from-sky-400 via-indigo-300 to-emerald-400 bg-clip-text text-transparent">
+                        Python Masterclass Notes
+                    </h1>
+                    <p class="text-xs text-slate-400 hidden sm:block">100 Complete Topics • Topic-Wise Notes & Examples</p>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-md relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" id="searchInput" placeholder="Search topics, theory notes, or keywords... (e.g., OOP, list, decorator)" 
+                    class="w-full bg-slate-900/90 border border-slate-700/60 rounded-xl pl-10 pr-9 py-2 text-sm text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all">
+                <button id="clearSearchBtn" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Actions Header -->
+            <div class="flex items-center space-x-2">
+                <button id="toggleDrawerBtn" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700/60 text-slate-200 text-xs sm:text-sm font-medium flex items-center gap-2 transition">
+                    <i class="fa-solid fa-bars-staggered text-sky-400"></i>
+                    <span class="hidden md:inline">Topics Directory</span>
+                </button>
+                <button id="starredOnlyBtn" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700/60 text-amber-400 text-sm transition relative" title="Saved Bookmarks">
+                    <i class="fa-solid fa-star"></i>
+                    <span id="starredBadge" class="hidden absolute -top-1 -right-1 w-4 h-4 bg-amber-500 text-slate-950 font-bold text-[10px] rounded-full flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Drawer Sidebar -->
+    <div id="drawerOverlay" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300"></div>
+    <aside id="topicDrawer" class="fixed top-0 right-0 h-full w-80 sm:w-96 bg-slate-900 border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="p-4 border-b border-slate-800 flex items-center justify-between">
+            <h2 class="font-bold text-slate-100 flex items-center gap-2">
+                <i class="fa-solid fa-list-ol text-sky-400"></i> 100 Topics Directory
+            </h2>
+            <button id="closeDrawerBtn" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="p-3 border-b border-slate-800 bg-slate-950/50 flex gap-2">
+            <button class="category-filter-btn active-cat bg-brand-600 text-white px-3 py-1 rounded-lg text-xs font-medium" data-cat="all">All</button>
+            <button class="category-filter-btn text-slate-400 hover:bg-slate-800 px-3 py-1 rounded-lg text-xs font-medium" data-cat="basics">Basics</button>
+            <button class="category-filter-btn text-slate-400 hover:bg-slate-800 px-3 py-1 rounded-lg text-xs font-medium" data-cat="ds">Data Structures</button>
+            <button class="category-filter-btn text-slate-400 hover:bg-slate-800 px-3 py-1 rounded-lg text-xs font-medium" data-cat="advanced">Advanced</button>
+        </div>
+        <div id="drawerList" class="flex-1 overflow-y-auto p-3 space-y-1">
+            <!-- Dynamically populated drawer items -->
+        </div>
+    </aside>
+
+    <!-- Hero Banner -->
+    <section class="relative pt-8 pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-300 text-xs font-medium mb-6 animate-float">
+            <i class="fa-solid fa-book-open text-amber-400"></i> Detailed Topic Notes & Concept Explanations Included
+        </div>
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
+            Comprehensive Python Masterclass <br class="hidden sm:inline">
+            <span class="bg-gradient-to-r from-sky-400 via-indigo-400 to-emerald-400 bg-clip-text text-transparent">Topic-Wise Notes & Live Code</span>
+        </h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto">
+            100 complete topics with detailed theory notes, key takeaways, code execution simulations, and interactive mini-apps.
+        </p>
+
+        <!-- Quick Stats / Category Quick Jump -->
+        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto">
+            <div class="glass-panel p-3.5 rounded-2xl text-center hover:border-sky-500/40 transition">
+                <div class="text-2xl font-bold text-sky-400">100</div>
+                <div class="text-xs text-slate-400 mt-1">Total Topics</div>
+            </div>
+            <div class="glass-panel p-3.5 rounded-2xl text-center hover:border-indigo-500/40 transition">
+                <div class="text-2xl font-bold text-indigo-400">01 - 30</div>
+                <div class="text-xs text-slate-400 mt-1">Basics & Logic</div>
+            </div>
+            <div class="glass-panel p-3.5 rounded-2xl text-center hover:border-emerald-500/40 transition">
+                <div class="text-2xl font-bold text-emerald-400">31 - 61</div>
+                <div class="text-xs text-slate-400 mt-1">Data Structures</div>
+            </div>
+            <div class="glass-panel p-3.5 rounded-2xl text-center hover:border-amber-500/40 transition">
+                <div class="text-2xl font-bold text-amber-400">62 - 100</div>
+                <div class="text-xs text-slate-400 mt-1">OOP & Advanced</div>
+            </div>
+        </div>
+
+        <!-- Filter Pills Bar -->
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
+            <button class="pill-btn active-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-sky-500 text-white shadow-lg shadow-sky-500/20 transition" data-group="all">All Topics (100)</button>
+            <button class="pill-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition" data-group="sec-1">Fundamentals (1-15)</button>
+            <button class="pill-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition" data-group="sec-2">Operators & Logic (16-30)</button>
+            <button class="pill-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition" data-group="sec-3">Data Structures (31-48)</button>
+            <button class="pill-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition" data-group="sec-4">Functions & Tools (49-61)</button>
+            <button class="pill-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition" data-group="sec-5">OOP & Adv (62-94)</button>
+            <button class="pill-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 border border-slate-800 text-slate-300 hover:border-slate-700 transition" data-group="sec-6">Projects & Revision (95-100)</button>
+        </div>
+    </section>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 space-y-8" id="topicsContainer">
+        <!-- Topic cards populated dynamically -->
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-700 text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 pointer-events-none">
+        <div id="toastIcon" class="text-emerald-400 text-lg"><i class="fa-solid fa-check-circle"></i></div>
+        <div id="toastMessage" class="text-sm font-medium">Copied to clipboard!</div>
+    </div>
+
+    <!-- Back To Top Button -->
+    <button id="backToTop" class="fixed bottom-6 left-6 z-40 p-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white shadow-xl shadow-sky-600/30 opacity-0 transition-all duration-300 translate-y-10" title="Back to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script>
+        const pythonNotesData = [
+            {
+                id: 1,
+                title: "Introduction to Python",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "High-level, interpreted, general-purpose language created by Guido van Rossum in 1991.",
+                notes: [
+                    "<strong>Key Characteristics:</strong> Easy-to-read syntax, dynamically typed, multi-paradigm (OOP, Procedural, Functional).",
+                    "<strong>Interpreted Language:</strong> Code is executed line-by-line via the Python Virtual Machine (PVM).",
+                    "<strong>Primary Domains:</strong> Web Development (Django/Flask), Data Science (Pandas/NumPy), AI/ML (TensorFlow/PyTorch), Automation & Scripting.",
+                    "<strong>Batteries Included:</strong> Comes with a rich standard library covering math, file I/O, networking, and JSON."
+                ],
+                code: `# Python Overview Example
+print("Welcome to Python!")
+print("Clean syntax makes development fast and expressive.")`,
+                output: "Welcome to Python!\nClean syntax makes development fast and expressive."
+            },
+            {
+                id: 2,
+                title: "First Python Program",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Understanding stdout and the built-in print() function.",
+                notes: [
+                    "<strong>print() Function:</strong> Evaluates arguments and writes output to standard output (console).",
+                    "<strong>Automatic Newline:</strong> Ends with a newline character (\\n) by default.",
+                    "<strong>Separator Control:</strong> Default item separator is space (sep=' '), customizable with keyword args.",
+                    "<strong>Syntax Simplicity:</strong> No semicolons or boilerplate code required compared to C++ or Java."
+                ],
+                code: `# Outputting multiple statements
+print("Hello World!")
+print("Welcome to Python Programming")
+print("Data 1", "Data 2", sep=" | ")`,
+                output: "Hello World!\nWelcome to Python Programming\nData 1 | Data 2"
+            },
+            {
+                id: 3,
+                title: "Comments",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Documenting code for human readers without affecting runtime execution.",
+                notes: [
+                    "<strong>Single-Line Comments:</strong> Start with # symbol. Everything following on that line is ignored by the interpreter.",
+                    "<strong>Multi-Line Comments:</strong> Written using triple-quoted strings (\"\"\" or ''') not assigned to a variable.",
+                    "<strong>Docstrings:</strong> Multi-line strings placed right after function/class definitions become callable documentation.",
+                    "<strong>Best Practice:</strong> Explain *why* code does something, not just *what* it does."
+                ],
+                code: `# Single-line comment explaining the variable below
+student_count = 25  # In-line comment
+
+"""
+This is a multi-line docstring style block.
+It can span across multiple lines seamlessly.
+"""
+print("Comments keep code readable.")`,
+                output: "Comments keep code readable."
+            },
+            {
+                id: 4,
+                title: "Variables",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Named references pointing to objects stored in memory.",
+                notes: [
+                    "<strong>Dynamic Typing:</strong> No explicit type declaration required. Type is inferred at runtime.",
+                    "<strong>Variable Naming Rules:</strong> Must start with a letter or underscore (_). Cannot start with digits or use reserved keywords.",
+                    "<strong>Naming Convention:</strong> PEP 8 recommends snake_case for variable names (e.g., student_age).",
+                    "<strong>Memory Assignment:</strong> Assigning a value creates an object in memory and attaches the identifier label to it."
+                ],
+                code: `# Variable assignment examples
+name = "Rahul"
+age = 15
+marks = 85.5
+
+print("Student:", name)
+print("Age:", age)
+print("Marks:", marks)`,
+                output: "Student: Rahul\nAge: 15\nMarks: 85.5"
+            },
+            {
+                id: 5,
+                title: "Multiple Variables",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Assigning values to multiple variables in a single expressive line.",
+                notes: [
+                    "<strong>Multiple Assignment:</strong> Assign distinct values to distinct variables in order: a, b = 1, 2.",
+                    "<strong>Same Value Assignment:</strong> Assign one value to multiple variables simultaneously: x = y = z = 0.",
+                    "<strong>Value Swapping:</strong> Swap variables cleanly without temporary storage: x, y = y, x.",
+                    "<strong>Unpacking Convenience:</strong> Works directly with tuples, lists, and iterables."
+                ],
+                code: `# Multiple variable assignment & swapping
+student_name, student_age, student_class = "Rahul", 15, 8
+print(student_name, student_age, student_class)
+
+# Swapping variables in Python
+x, y = 10, 20
+x, y = y, x
+print("Swapped x & y:", x, y)`,
+                output: "Rahul 15 8\nSwapped x & y: 20 10"
+            },
+            {
+                id: 6,
+                title: "Constant-Style Variables",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Representing immutable intentional constants by convention.",
+                notes: [
+                    "<strong>No Enforced Constants:</strong> Python doesn't have a const keyword; values can technically be modified.",
+                    "<strong>UPPERCASE Convention:</strong> Developers use ALL_CAPS names to signal variables that should not be changed.",
+                    "<strong>PEP 8 Standard:</strong> Defines constants at module level (e.g., MATH_PI = 3.14159).",
+                    "<strong>Enforcement Options:</strong> Advanced type checkers (Mypy) or custom @property decorators can restrict mutation."
+                ],
+                code: `# Constants convention
+PI = 3.14159
+MAX_MARKS = 100
+DATABASE_URL = "localhost:5432"
+
+print("PI:", PI)
+print("Max Marks Allowed:", MAX_MARKS)`,
+                output: "PI: 3.14159\nMax Marks Allowed: 100"
+            },
+            {
+                id: 7,
+                title: "Data Types",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Core scalar types: str, int, float, bool, NoneType.",
+                notes: [
+                    "<strong>Built-in Primitive Types:</strong> int (integers), float (decimals), str (text), bool (True/False), NoneType (absence of value).",
+                    "<strong>type() Function:</strong> Returns the class type of any variable or object.",
+                    "<strong>Everything is an Object:</strong> In Python, primitive values are instances of built-in classes.",
+                    "<strong>Arbitrary Precision:</strong> Python integers automatically handle arbitrarily large numbers without buffer overflow."
+                ],
+                code: `name = "Rahul"        # str
+age = 15             # int
+height = 5.6         # float
+is_student = True    # bool
+result = None        # NoneType
+
+print(type(name))
+print(type(age))
+print(type(height))
+print(type(is_student))
+print(type(result))`,
+                output: "<class 'str'>\n<class 'int'>\n<class 'float'>\n<class 'bool'>\n<class 'NoneType'>"
+            },
+            {
+                id: 8,
+                title: "String",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Immutable sequence of Unicode characters enclosed in single or double quotes.",
+                notes: [
+                    "<strong>Immutability:</strong> Strings cannot be modified in place. Operations return new string objects.",
+                    "<strong>Quotes:</strong> Single (' '), double (\" \"), or triple (\"\"\" \"\"\") quotes for multi-line text.",
+                    "<strong>Casing Methods:</strong> upper(), lower(), title(), capitalize(), swapcase().",
+                    "<strong>Unicode Support:</strong> Built-in full support for all international text characters and emojis."
+                ],
+                code: `message = "Hello Python"
+
+print(message)
+print("Uppercase:", message.upper())
+print("Lowercase:", message.lower())
+print("Title Case:", message.title())`,
+                output: "Hello Python\nUppercase: HELLO PYTHON\nLowercase: hello python\nTitle Case: Hello Python"
+            },
+            {
+                id: 9,
+                title: "String Indexing",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Accessing individual elements by position.",
+                notes: [
+                    "<strong>Zero-Based Indexing:</strong> First element starts at index 0.",
+                    "<strong>Negative Indexing:</strong> Index -1 refers to the last element, -2 to the second last.",
+                    "<strong>IndexError:</strong> Occurs when trying to access an index out of valid range.",
+                    "<strong>Read-Only Access:</strong> Item assignment (e.g. text[0] = 'X') raises TypeError."
+                ],
+                code: `text = "Python"
+
+print("First character [0]:", text[0])
+print("Second character [1]:", text[1])
+print("Last character [-1]:", text[-1])
+print("Second to last [-2]:", text[-2])`,
+                output: "First character [0]: P\nSecond character [1]: y\nLast character [-1]: n\nSecond to last [-2]: o"
+            },
+            {
+                id: 10,
+                title: "String Slicing",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Extracting substrings using sequence slicing syntax string[start:stop:step].",
+                notes: [
+                    "<strong>Syntax:</strong> string[start : stop : step].",
+                    "<strong>Exclusive Upper Bound:</strong> Slicing includes start up to stop-1.",
+                    "<strong>Defaults:</strong> start defaults to 0, stop to len(), step to 1.",
+                    "<strong>Reversing Strings:</strong> [::-1] step of -1 iterates backwards to reverse text easily."
+                ],
+                code: `text = "Python Programming"
+
+print("First word [0:6]:", text[0:6])
+print("Start omitted [:6]:", text[:6])
+print("From index 7 [7:]:", text[7:])
+print("Reversed string [::-1]:", text[::-1])`,
+                output: "First word [0:6]: Python\nStart omitted [:6]: Python\nFrom index 7 [7:]: Programming\nReversed string [::-1]: gnimmargorP nohtyP"
+            },
+            {
+                id: 11,
+                title: "String Methods",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Built-in helper methods for searching, cleaning, and replacing text.",
+                notes: [
+                    "<strong>Whitespace Cleaning:</strong> strip(), lstrip(), rstrip() remove unwanted spaces or specific characters.",
+                    "<strong>Text Replacement:</strong> replace(old, new) swaps occurrences.",
+                    "<strong>Validation Checks:</strong> startswith(), endswith(), isdigit(), isalpha(), isalnum().",
+                    "<strong>Splitting & Joining:</strong> split() breaks into list, join() joins iterable into text."
+                ],
+                code: `text = "   Hello Python World   "
+
+clean_text = text.strip()
+print("Cleaned:", clean_text)
+print("Replaced:", clean_text.replace("Python", "Awesome"))
+print("Starts with 'Hello':", clean_text.startswith("Hello"))
+print("Ends with 'World':", clean_text.endswith("World"))`,
+                output: "Cleaned: Hello Python World\nReplaced: Hello Awesome World\nStarts with 'Hello': True\nEnds with 'World': True"
+            },
+            {
+                id: 12,
+                title: "F-String",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Formatted string literals (Python 3.6+) for clean, fast string interpolation.",
+                notes: [
+                    "<strong>Syntax:</strong> Prefixed with 'f' or 'F' before quotes: f\"Hello {variable}\".",
+                    "<strong>Expression Evaluation:</strong> Supports math, function calls, and logic directly inside {}.",
+                    "<strong>Formatting Specs:</strong> Format decimals (f\"{val:.2f}\") or alignment effortlessly.",
+                    "<strong>Performance:</strong> Faster than % formatting and str.format() because expressions are evaluated at runtime directly."
+                ],
+                code: `name = "Rahul"
+age = 15
+score = 88.456
+
+# Interpolation & rounding inside f-string
+message = f"Student: {name} | Age: {age} | Score: {score:.2f}"
+print(message)
+
+# Expressions inside f-string
+print(f"Next year age: {age + 1}")`,
+                output: "Student: Rahul | Age: 15 | Score: 88.46\nNext year age: 16"
+            },
+            {
+                id: 13,
+                title: "Type Conversion",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Implicit & explicit type coercion (casting) functions.",
+                notes: [
+                    "<strong>Explicit Casting:</strong> Using int(), float(), str(), bool(), list(), tuple(), set().",
+                    "<strong>Float to Int:</strong> Truncates decimal portion without rounding (e.g. 99.99 becomes 99).",
+                    "<strong>Implicit Coercion:</strong> Python automatically converts smaller types to larger types (int + float -> float).",
+                    "<strong>ValueError:</strong> Raised when converting non-numeric strings to int/float."
+                ],
+                code: `# String to Integer
+num_str = "100"
+num_int = int(num_str)
+print("Converted Int:", num_int, type(num_int))
+
+# Truncating Float to Integer
+price = 99.99
+print("Truncated Int:", int(price))
+
+# Integer to Float & String
+print("Float conversion:", float(15))
+print("String conversion:", str(100) + " Points")`,
+                output: "Converted Int: 100 <class 'int'>\nTruncated Int: 99\nFloat conversion: 15.0\nString conversion: 100 Points"
+            },
+            {
+                id: 14,
+                title: "User Input",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Capturing standard user input via terminal console.",
+                notes: [
+                    "<strong>input() Function:</strong> Pauses program execution and reads user keyboard input until Enter is pressed.",
+                    "<strong>Always Returns String:</strong> Every user input is initially returned as a string.",
+                    "<strong>Prompt String:</strong> Optional message displayed to the user before input.",
+                    "<strong>Type Casting Requirement:</strong> Numbers must be wrapped with int() or float() for math calculations."
+                ],
+                code: `# Note: Interactive input simulation
+name = "Rahul"  # Simulated user input
+print("Hello,", name)
+print("Input is processed as string type.")`,
+                output: "Hello, Rahul\nInput is processed as string type."
+            },
+            {
+                id: 15,
+                title: "Input with Number",
+                category: "basics",
+                group: "sec-1",
+                level: "Beginner",
+                desc: "Converting user string input into numeric types for computations.",
+                notes: [
+                    "<strong>Nested Casting:</strong> int(input()) or float(input()) converts input directly.",
+                    "<strong>Error Handling:</strong> Using try-except prevents crashes if users type non-numeric text.",
+                    "<strong>Real-World Use:</strong> Essential for building calculators, forms, and CLI tools."
+                ],
+                code: `# Converting input string to numeric age
+user_input = "15"  # Simulated input string
+age = int(user_input)
+
+print("Parsed Age:", age)
+print("Age in 5 years:", age + 5)`,
+                output: "Parsed Age: 15\nAge in 5 years: 20"
+            },
+            {
+                id: 16,
+                title: "Arithmetic Operators",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Performing mathematical calculations (+, -, *, /, //, %, **).",
+                notes: [
+                    "<strong>Standard Operators:</strong> Addition (+), Subtraction (-), Multiplication (*).",
+                    "<strong>True Division (/):</strong> Always returns a float (10 / 2 -> 5.0).",
+                    "<strong>Floor Division (//):</strong> Divides and rounds down to nearest integer (10 // 3 -> 3).",
+                    "<strong>Modulus (%):</strong> Returns the remainder of division (10 % 3 -> 1).",
+                    "<strong>Exponentiation (**):</strong> Calculates power (10 ** 3 -> 1000)."
+                ],
+                code: `a, b = 10, 3
+
+print("Addition (+):", a + b)
+print("Subtraction (-):", a - b)
+print("Multiplication (*):", a * b)
+print("True Division (/):", a / b)
+print("Floor Division (//):", a // b)
+print("Modulus (%):", a % b)
+print("Power (**):", a ** b)`,
+                output: "Addition (+): 13\nSubtraction (-): 7\nMultiplication (*): 30\nTrue Division (/): 3.3333333333333335\nFloor Division (//): 3\nModulus (%): 1\nPower (**): 1000"
+            },
+            {
+                id: 17,
+                title: "Comparison Operators",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Evaluating equality and order relationships returning booleans (True/False).",
+                notes: [
+                    "<strong>Equality (==):</strong> Checks if values are equal (does not check memory location like 'is').",
+                    "<strong>Inequality (!=):</strong> Checks if values are not equal.",
+                    "<strong>Relational Operators:</strong> Greater than (>), Less than (<), Greater/Equal (>=), Less/Equal (<=).",
+                    "<strong>Chained Comparisons:</strong> Python allows syntax like: 10 < x < 20."
+                ],
+                code: `a, b = 10, 5
+
+print("Equal (==):", a == b)
+print("Not Equal (!=):", a != b)
+print("Greater Than (>):", a > b)
+print("Less Than (<):", a < b)
+print("Greater or Equal (>=):", a >= b)
+print("Chained Test (0 < b < a):", 0 < b < a)`,
+                output: "Equal (==): False\nNot Equal (!=): True\nGreater Than (>): True\nLess Than (<): False\nGreater or Equal (>=): True\nChained Test (0 < b < a): True"
+            },
+            {
+                id: 18,
+                title: "Logical Operators",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Combining boolean expressions with and, or, and not.",
+                notes: [
+                    "<strong>and Operator:</strong> Returns True only if BOTH conditions are True.",
+                    "<strong>or Operator:</strong> Returns True if AT LEAST ONE condition is True.",
+                    "<strong>not Operator:</strong> Inverts boolean truth value (True -> False).",
+                    "<strong>Short-Circuit Evaluation:</strong> 'and' stops if first is False; 'or' stops if first is True."
+                ],
+                code: `age = 20
+
+# Combining logical checks
+is_adult = age >= 18 and age < 60
+is_senior_or_child = age < 18 or age >= 60
+
+print("Is Adult (18-59):", is_adult)
+print("Is Senior/Child:", is_senior_or_child)
+print("Negated check (not True):", not (age > 18))`,
+                output: "Is Adult (18-59): True\nIs Senior/Child: False\nNegated check (not True): False"
+            },
+            {
+                id: 19,
+                title: "Assignment Operators",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Shorthand syntax to evaluate and reassign values in-place.",
+                notes: [
+                    "<strong>Compound Operators:</strong> +=, -=, *=, /=, //=, %=, **=.",
+                    "<strong>Operation Flow:</strong> num += 5 is equivalent to num = num + 5.",
+                    "<strong>Mutable In-Place Efficiency:</strong> Modifies mutable objects like lists in-place when supported."
+                ],
+                code: `number = 10
+
+number += 5  # 15
+print("After += 5:", number)
+
+number -= 2  # 13
+print("After -= 2:", number)
+
+number *= 2  # 26
+print("After *= 2:", number)
+
+number //= 2 # 13
+print("After //= 2:", number)`,
+                output: "After += 5: 15\nAfter -= 2: 13\nAfter *= 2: 26\nAfter //= 2: 13"
+            },
+            {
+                id: 20,
+                title: "If Statement",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Conditional execution based on boolean truth testing.",
+                notes: [
+                    "<strong>Indentation Standard:</strong> Python uses 4 spaces for block indentation instead of curly braces {}.",
+                    "<strong>Colon Requirement:</strong> Conditions end with a colon (:).",
+                    "<strong>Truthy & Falsy:</strong> 0, empty string \"\", empty collections [], and None evaluate as False in conditions."
+                ],
+                code: `age = 20
+
+if age >= 18:
+    print("Condition met: You are an adult.")
+    print("Code inside indentation executes.")`,
+                output: "Condition met: You are an adult.\nCode inside indentation executes."
+            },
+            {
+                id: 21,
+                title: "If Else",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Providing fallback execution path when condition evaluates to False.",
+                notes: [
+                    "<strong>Binary Branching:</strong> Exactly one branch will execute (either 'if' or 'else').",
+                    "<strong>Clean Structure:</strong> Prevents writing redundant inverted if statements.",
+                    "<strong>Ternary Operator Shorthand:</strong> value = x if condition else y."
+                ],
+                code: `age = 15
+
+if age >= 18:
+    print("You can vote.")
+else:
+    print("You cannot vote yet.")
+
+# Ternary inline expression
+status = "Adult" if age >= 18 else "Minor"
+print("Status:", status)`,
+                output: "You cannot vote yet.\nStatus: Minor"
+            },
+            {
+                id: 22,
+                title: "If Elif Else",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Evaluating multiple non-overlapping conditions sequentially.",
+                notes: [
+                    "<strong>Sequential Evaluation:</strong> Conditions are tested from top to bottom.",
+                    "<strong>First Match Execution:</strong> Once a true condition is met, its block executes and the rest are skipped.",
+                    "<strong>Optional Final Else:</strong> Catch-all fallback if no prior elif condition is met."
+                ],
+                code: `marks = 85
+
+if marks >= 90:
+    grade = "A+"
+elif marks >= 80:
+    grade = "A"
+elif marks >= 70:
+    grade = "B"
+elif marks >= 60:
+    grade = "C"
+else:
+    grade = "D"
+
+print("Calculated Grade:", grade)`,
+                output: "Calculated Grade: A"
+            },
+            {
+                id: 23,
+                title: "Nested If",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Placing conditional statements inside other conditional blocks.",
+                notes: [
+                    "<strong>Hierarchical Logic:</strong> Used when decision-making depends on multiple sequential sub-criteria.",
+                    "<strong>Indentation Levels:</strong> Each level adds 4 spaces of indentation.",
+                    "<strong>Refactoring Tip:</strong> Can often be simplified using logical operators (and)."
+                ],
+                code: `age = 20
+has_id = True
+
+if age >= 18:
+    if has_id:
+        print("Entry allowed: Age & ID verified.")
+    else:
+        print("ID required for verification.")
+else:
+    print("Underage entry denied.")`,
+                output: "Entry allowed: Age & ID verified."
+            },
+            {
+                id: 24,
+                title: "For Loop",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Iterating over sequences (lists, tuples, ranges, strings).",
+                notes: [
+                    "<strong>Definite Iteration:</strong> Automatically handles item traversal without manual index counters.",
+                    "<strong>Iterable Protocol:</strong> Works on any object implementing __iter__ or __getitem__.",
+                    "<strong>Loop Variable:</strong> Assigns current element to loop variable automatically."
+                ],
+                code: `# Simple range iteration
+for i in range(1, 6):
+    print(f"Iteration #{i}")`,
+                output: "Iteration #1\nIteration #2\nIteration #3\nIteration #4\nIteration #5"
+            },
+            {
+                id: 25,
+                title: "For Loop with String",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Iterating directly character-by-character over string text.",
+                notes: [
+                    "<strong>Character Extraction:</strong> Yields every single character sequentially including whitespace and symbols.",
+                    "<strong>Filtering/Counting:</strong> Ideal for counting vowels, searching letters, or formatting text."
+                ],
+                code: `word = "Python"
+
+for letter in word:
+    print("Letter:", letter)`,
+                output: "Letter: P\nLetter: y\nLetter: t\nLetter: h\nLetter: o\nLetter: n"
+            },
+            {
+                id: 26,
+                title: "Range()",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Generating arithmetic sequences range(start, stop, step).",
+                notes: [
+                    "<strong>Lazy Evaluation:</strong> Generates numbers on demand without filling memory.",
+                    "<strong>Parameters:</strong> range(stop), range(start, stop), range(start, stop, step).",
+                    "<strong>Step Value:</strong> Can be positive or negative (e.g. range(10, 0, -2) counts down)."
+                ],
+                code: `# Default step of 1
+for num in range(1, 6):
+    print(num, end=" ")
+print()
+
+# Step of 2
+for even in range(2, 11, 2):
+    print(even, end=" ")
+print()`,
+                output: "1 2 3 4 5 \n2 4 6 8 10 "
+            },
+            {
+                id: 27,
+                title: "While Loop",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Indefinite iteration repeating as long as a specified condition remains True.",
+                notes: [
+                    "<strong>Indefinite Iteration:</strong> Used when total iteration count isn't known in advance.",
+                    "<strong>Infinite Loop Warning:</strong> Ensure loop condition variable is modified inside body to avoid hanging.",
+                    "<strong>Sentinel Values:</strong> Great for waiting for user input or checking dynamic flags."
+                ],
+                code: `counter = 1
+
+while counter <= 5:
+    print(f"Count: {counter}")
+    counter += 1`,
+                output: "Count: 1\nCount: 2\nCount: 3\nCount: 4\nCount: 5"
+            },
+            {
+                id: 28,
+                title: "Break",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Terminating the nearest enclosing loop immediately.",
+                notes: [
+                    "<strong>Early Exit:</strong> Bypasses remaining code in loop and breaks loop execution.",
+                    "<strong>Loop Else Clause:</strong> Bypasses loop's else block if break occurs."
+                ],
+                code: `for number in range(1, 10):
+    if number == 5:
+        print("Break condition met at 5!")
+        break
+    print("Number:", number)`,
+                output: "Number: 1\nNumber: 2\nNumber: 3\nNumber: 4\nBreak condition met at 5!"
+            },
+            {
+                id: 29,
+                title: "Continue",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Skipping the remaining lines of current iteration and jumping to the next.",
+                notes: [
+                    "<strong>Skip Step:</strong> Does not terminate loop entirely; advances iterator to next turn immediately."
+                ],
+                code: `for number in range(1, 6):
+    if number == 3:
+        print("Skipping 3!")
+        continue
+    print("Number:", number)`,
+                output: "Number: 1\nNumber: 2\nSkipping 3!\nNumber: 4\nNumber: 5"
+            },
+            {
+                id: 30,
+                title: "Pass",
+                category: "basics",
+                group: "sec-2",
+                level: "Beginner",
+                desc: "Syntactic placeholder statement that performs no operation.",
+                notes: [
+                    "<strong>No-Op Statement:</strong> Prevents IndentationError when defining empty blocks.",
+                    "<strong>Future Code Stubs:</strong> Useful during drafting functions, classes, or loops."
+                ],
+                code: `for number in range(5):
+    if number == 2:
+        pass  # TODO: Implement special logic later
+    print("Val:", number)`,
+                output: "Val: 0\nVal: 1\nVal: 2\nVal: 3\nVal: 4"
+            },
+            {
+                id: 31,
+                title: "List",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Ordered, mutable, heterogenous sequence enclosed in square brackets [].",
+                notes: [
+                    "<strong>Mutable Collection:</strong> Elements can be added, updated, or removed in place.",
+                    "<strong>Heterogeneous Elements:</strong> Can hold mixed types (ints, strings, dicts, nested lists).",
+                    "<strong>Dynamic Resizing:</strong> Grows and shrinks memory automatically."
+                ],
+                code: `students = ["Rahul", "Aman", "Priya", "Neha"]
+mixed_list = [10, "Python", True, 3.14]
+
+print("Students List:", students)
+print("List Length:", len(students))`,
+                output: "Students List: ['Rahul', 'Aman', 'Priya', 'Neha']\nList Length: 4"
+            },
+            {
+                id: 32,
+                title: "List Indexing",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Retrieving list items via zero-based indices.",
+                notes: [
+                    "<strong>Zero-Indexed:</strong> list[0] is first element.",
+                    "<strong>Negative Indexing:</strong> list[-1] gets last element.",
+                    "<strong>Item Modification:</strong> students[0] = 'Raj' mutates list item."
+                ],
+                code: `students = ["Rahul", "Aman", "Priya"]
+
+print("First:", students[0])
+print("Second:", students[1])
+print("Last:", students[-1])
+
+students[0] = "Rahul Kumar"
+print("Updated List:", students)`,
+                output: "First: Rahul\nSecond: Aman\nLast: Priya\nUpdated List: ['Rahul Kumar', 'Aman', 'Priya']"
+            },
+            {
+                id: 33,
+                title: "List Slicing",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Extracting sublists using list[start:stop:step].",
+                notes: [
+                    "<strong>Sublist Copy:</strong> Slicing returns a shallow copy of sublist.",
+                    "<strong>Shallow Copying:</strong> numbers[:] creates copy of entire list."
+                ],
+                code: `numbers = [10, 20, 30, 40, 50]
+
+print("Slice [1:4]:", numbers[1:4])
+print("First 3 [:3]:", numbers[:3])
+print("From index 2 [2:]:", numbers[2:])`,
+                output: "Slice [1:4]: [20, 30, 40]\nFirst 3 [:3]: [10, 20, 30]\nFrom index 2 [2:]: [30, 40, 50]"
+            },
+            {
+                id: 34,
+                title: "List Methods",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "In-place list manipulation (append, insert, remove, pop).",
+                notes: [
+                    "<strong>append(x):</strong> Adds item x to the end of list.",
+                    "<strong>insert(i, x):</strong> Inserts item x at index i.",
+                    "<strong>remove(x):</strong> Removes first occurrence of value x.",
+                    "<strong>pop(i):</strong> Removes and returns item at index i (defaults to last)."
+                ],
+                code: `fruits = ["Apple", "Banana"]
+
+fruits.append("Mango")
+print("After append:", fruits)
+
+fruits.insert(1, "Orange")
+print("After insert at 1:", fruits)
+
+fruits.remove("Banana")
+print("After remove Banana:", fruits)
+
+popped = fruits.pop()
+print(f"Popped item '{popped}', list now:", fruits)`,
+                output: "After append: ['Apple', 'Banana', 'Mango']\nAfter insert at 1: ['Apple', 'Orange', 'Banana', 'Mango']\nAfter remove Banana: ['Apple', 'Orange', 'Mango']\nPopped item 'Mango', list now: ['Apple', 'Orange']"
+            },
+            {
+                id: 35,
+                title: "Sorting List",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Sorting lists with sort() and reverse().",
+                notes: [
+                    "<strong>sort():</strong> Sorts list in-place (returns None).",
+                    "<strong>sorted(list):</strong> Built-in function that returns a new sorted list.",
+                    "<strong>reverse():</strong> Reverses elements in-place."
+                ],
+                code: `numbers = [50, 10, 40, 20, 30]
+
+numbers.sort()
+print("Ascending Sort:", numbers)
+
+numbers.sort(reverse=True)
+print("Descending Sort:", numbers)`,
+                output: "Ascending Sort: [10, 20, 30, 40, 50]\nDescending Sort: [50, 40, 30, 20, 10]"
+            },
+            {
+                id: 36,
+                title: "List Loop",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Iterating over list elements using for loops.",
+                notes: [
+                    "<strong>Direct Iteration:</strong> Cleanest way to inspect items.",
+                    "<strong>Index Iteration:</strong> Use range(len(list)) if index is needed."
+                ],
+                code: `students = ["Rahul", "Aman", "Priya"]
+
+for student in students:
+    print("Student Name:", student)`,
+                output: "Student Name: Rahul\nStudent Name: Aman\nStudent Name: Priya"
+            },
+            {
+                id: 37,
+                title: "List Comprehension",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Concise expression syntax [expr for item in iterable if cond] for generating lists.",
+                notes: [
+                    "<strong>Pythonic Idiom:</strong> Replaces boilerplate loop construct.",
+                    "<strong>Conditional Filter:</strong> Can include if clauses to filter elements.",
+                    "<strong>Performance:</strong> Faster execution than manual loop appends."
+                ],
+                code: `numbers = [1, 2, 3, 4, 5, 6]
+
+# Square all numbers
+squares = [num ** 2 for num in numbers]
+print("Squares:", squares)
+
+# Filter evens only
+evens = [num for num in numbers if num % 2 == 0]
+print("Evens:", evens)`,
+                output: "Squares: [1, 4, 9, 16, 25, 36]\nEvens: [2, 4, 6]"
+            },
+            {
+                id: 38,
+                title: "Tuple",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Ordered, immutable sequence enclosed in parentheses ().",
+                notes: [
+                    "<strong>Immutable Data:</strong> Elements cannot be changed, added, or removed.",
+                    "<strong>Performance:</strong> Faster iteration and lower memory consumption than lists.",
+                    "<strong>Dictionary Keys:</strong> Can be used as dict keys because tuples are hashable."
+                ],
+                code: `colors = ("Red", "Green", "Blue")
+
+print("Tuple:", colors)
+print("First Element:", colors[0])
+print("Count of 'Red':", colors.count("Red"))`,
+                output: "Tuple: ('Red', 'Green', 'Blue')\nFirst Element: Red\nCount of 'Red': 1"
+            },
+            {
+                id: 39,
+                title: "Tuple Unpacking",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Extracting tuple elements directly into variables.",
+                notes: [
+                    "<strong>Sequence Unpacking:</strong> Variables on left must match tuple length.",
+                    "<strong>Extended Unpacking:</strong> Use *var to capture surplus items into list."
+                ],
+                code: `student = ("Rahul", 15, "Grade 8")
+
+name, age, grade = student
+print(f"Name: {name}, Age: {age}, Grade: {grade}")
+
+# Extended unpacking with star (*)
+first, *rest = (10, 20, 30, 40)
+print("First:", first, "| Rest:", rest)`,
+                output: "Name: Rahul, Age: 15, Grade: Grade 8\nFirst: 10 | Rest: [20, 30, 40]"
+            },
+            {
+                id: 40,
+                title: "Set",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Unordered, mutable collection of unique, hashable items enclosed in {}.",
+                notes: [
+                    "<strong>Uniqueness:</strong> Duplicate elements are automatically discarded.",
+                    "<strong>Unordered:</strong> Elements do not preserve insertion order and lack index lookup.",
+                    "<strong>O(1) Lookup:</strong> Highly optimized hash-table membership tests (val in set)."
+                ],
+                code: `numbers = {1, 2, 3, 4, 5}
+
+print("Set elements:", numbers)
+print("Is 3 in set?:", 3 in numbers)`,
+                output: "Set elements: {1, 2, 3, 4, 5}\nIs 3 in set?: True"
+            },
+            {
+                id: 41,
+                title: "Set Deduplication",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Automatically removing duplicates from sequences.",
+                notes: [
+                    "<strong>Deduplication Pattern:</strong> Convert list to set and back to list: list(set(data))."
+                ],
+                code: `raw_data = [1, 2, 2, 3, 3, 3, 4, 5, 5]
+unique_data = list(set(raw_data))
+
+print("Original Data:", raw_data)
+print("Deduplicated Data:", sorted(unique_data))`,
+                output: "Original Data: [1, 2, 2, 3, 3, 3, 4, 5, 5]\nDeduplicated Data: [1, 2, 3, 4, 5]"
+            },
+            {
+                id: 42,
+                title: "Set Methods",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Modifying set elements via add(), remove(), discard(), pop().",
+                notes: [
+                    "<strong>add(elem):</strong> Inserts unique item.",
+                    "<strong>remove(elem):</strong> Removes item; raises KeyError if not found.",
+                    "<strong>discard(elem):</strong> Removes item safely without raising error if missing."
+                ],
+                code: `numbers = {1, 2, 3}
+
+numbers.add(4)
+print("After add(4):", numbers)
+
+numbers.discard(2)
+print("After discard(2):", numbers)`,
+                output: "After add(4): {1, 2, 3, 4}\nAfter discard(2): {1, 3, 4}"
+            },
+            {
+                id: 43,
+                title: "Set Mathematical Operations",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Venn diagram math: Union (|), Intersection (&), Difference (-), Symmetric Difference (^).",
+                notes: [
+                    "<strong>Union (|):</strong> Combines elements from both sets.",
+                    "<strong>Intersection (&):</strong> Elements present in BOTH sets.",
+                    "<strong>Difference (-):</strong> Elements in set A but not set B."
+                ],
+                code: `a = {1, 2, 3}
+b = {3, 4, 5}
+
+print("Union (A | B):", a | b)
+print("Intersection (A & B):", a & b)
+print("Difference (A - B):", a - b)
+print("Symmetric Diff (A ^ B):", a ^ b)`,
+                output: "Union (A | B): {1, 2, 3, 4, 5}\nIntersection (A & B): {3}\nDifference (A - B): {1, 2}\nSymmetric Diff (A ^ B): {1, 2, 4, 5}"
+            },
+            {
+                id: 44,
+                title: "Dictionary",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Key-Value mapping pairs enclosed in { key: value }.",
+                notes: [
+                    "<strong>Insertion-Ordered:</strong> Preserves insertion key order (Python 3.7+).",
+                    "<strong>Unique Keys:</strong> Keys must be immutable and hashable (strings, numbers, tuples).",
+                    "<strong>Fast Lookup:</strong> O(1) average time complexity for retrieval."
+                ],
+                code: `student = {
+    "name": "Rahul",
+    "age": 15,
+    "class": 8
+}
+
+print("Student Dictionary:", student)
+print("Name Value:", student["name"])`,
+                output: "Student Dictionary: {'name': 'Rahul', 'age': 15, 'class': 8}\nName Value: Rahul"
+            },
+            {
+                id: 45,
+                title: "Access Dictionary Value",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Retrieving values safely using bracket [] or get() method.",
+                notes: [
+                    "<strong>Bracket Lookup dict[key]:</strong> Raises KeyError if key doesn't exist.",
+                    "<strong>get(key, default):</strong> Safely returns None or specified fallback if key missing."
+                ],
+                code: `student = {"name": "Rahul", "age": 15}
+
+print("Name:", student.get("name"))
+print("City (Safely fallback):", student.get("city", "Not Specified"))`,
+                output: "Name: Rahul\nCity (Safely fallback): Not Specified"
+            },
+            {
+                id: 46,
+                title: "Add / Update Dictionary",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Adding new keys or updating existing key mappings.",
+                notes: [
+                    "<strong>Direct Assignment:</strong> dict[key] = value updates existing or creates key.",
+                    "<strong>update(dict2):</strong> Merges another dictionary in-place."
+                ],
+                code: `student = {"name": "Rahul", "age": 15}
+
+student["city"] = "Patna"
+student["age"] = 16
+
+print("Updated Student:", student)`,
+                output: "Updated Student: {'name': 'Rahul', 'age': 16, 'city': 'Patna'}"
+            },
+            {
+                id: 47,
+                title: "Dictionary Methods",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Inspecting keys(), values(), items(), pop(), clear().",
+                notes: [
+                    "<strong>keys():</strong> View object of dictionary keys.",
+                    "<strong>values():</strong> View object of mapped values.",
+                    "<strong>items():</strong> View object of (key, value) tuples."
+                ],
+                code: `student = {"name": "Rahul", "age": 15, "class": 8}
+
+print("Keys:", list(student.keys()))
+print("Values:", list(student.values()))
+print("Items:", list(student.items()))`,
+                output: "Keys: ['name', 'age', 'class']\nValues: ['Rahul', 15, 8]\nItems: [('name', 'Rahul'), ('age', 15), ('class', 8)]"
+            },
+            {
+                id: 48,
+                title: "Dictionary Loop",
+                category: "ds",
+                group: "sec-3",
+                level: "Intermediate",
+                desc: "Iterating through keys and values cleanly using items().",
+                notes: [
+                    "<strong>Tuple Unpacking Loop:</strong> for key, value in dict.items(): iterates seamlessly."
+                ],
+                code: `student = {"name": "Rahul", "age": 15, "class": 8}
+
+for key, val in student.items():
+    print(f"{key.capitalize()}: {val}")`,
+                output: "Name: Rahul\nAge: 15\nClass: 8"
+            },
+            {
+                id: 49,
+                title: "Functions",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Reusable, named blocks of code defined with def keyword.",
+                notes: [
+                    "<strong>DRY Principle:</strong> Don't Repeat Yourself - reuse code blocks.",
+                    "<strong>Function Header:</strong> def function_name(): ended with colon.",
+                    "<strong>Execution:</strong> Called using parenthesis function_name()."
+                ],
+                code: `def greet():
+    print("Hello! Welcome to Python Masterclass.")
+
+# Invoke function
+greet()`,
+                output: "Hello! Welcome to Python Masterclass."
+            },
+            {
+                id: 50,
+                title: "Function with Parameter",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Passing data values into functions dynamically.",
+                notes: [
+                    "<strong>Parameter vs Argument:</strong> Parameter is variable name in header; Argument is value passed during call."
+                ],
+                code: `def greet_user(user_name):
+    print(f"Welcome back, {user_name}!")
+
+greet_user("Rahul")
+greet_user("Priya")`,
+                output: "Welcome back, Rahul!\nWelcome back, Priya!"
+            },
+            {
+                id: 51,
+                title: "Function Multiple Parameters",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Accepting positional arguments.",
+                notes: [
+                    "<strong>Positional Binding:</strong> Arguments map to parameters in order received."
+                ],
+                code: `def calculate_sum(a, b):
+    print(f"Sum of {a} + {b} =", a + b)
+
+calculate_sum(10, 20)`,
+                output: "Sum of 10 + 20 = 30"
+            },
+            {
+                id: 52,
+                title: "Return Value",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Sending values back to the calling site with return statement.",
+                notes: [
+                    "<strong>Function Termination:</strong> Executing return immediately terminates function.",
+                    "<strong>Default Return:</strong> Functions without explicit return return None."
+                ],
+                code: `def multiply(a, b):
+    return a * b
+
+result = multiply(6, 7)
+print("Multiplication Result:", result)`,
+                output: "Multiplication Result: 42"
+            },
+            {
+                id: 53,
+                title: "Default Parameter",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Providing fallback values for parameters.",
+                notes: [
+                    "<strong>Optional Parameters:</strong> Used when argument isn't passed.",
+                    "<strong>Order Rule:</strong> Default parameters must follow non-default parameters in signature."
+                ],
+                code: `def welcome(name="Student"):
+    print("Welcome,", name)
+
+welcome()
+welcome("Rahul")`,
+                output: "Welcome, Student\nWelcome, Rahul"
+            },
+            {
+                id: 54,
+                title: "Keyword Argument",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Passing arguments explicitly by parameter name.",
+                notes: [
+                    "<strong>Order Independence:</strong> Named keyword args can be passed in any order."
+                ],
+                code: `def student_info(name, age):
+    print(f"Student: {name} | Age: {age}")
+
+student_info(age=15, name="Rahul")`,
+                output: "Student: Rahul | Age: 15"
+            },
+            {
+                id: 55,
+                title: "*args",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Accepting arbitrary positional arguments into a tuple.",
+                notes: [
+                    "<strong>Variable-Length Args:</strong> Prefix * collects extra positional args into tuple."
+                ],
+                code: `def total_sum(*numbers):
+    return sum(numbers)
+
+print("Sum 3 numbers:", total_sum(10, 20, 30))
+print("Sum 5 numbers:", total_sum(1, 2, 3, 4, 5))`,
+                output: "Sum 3 numbers: 60\nSum 5 numbers: 15"
+            },
+            {
+                id: 56,
+                title: "**kwargs",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Accepting arbitrary keyword arguments into a dictionary.",
+                notes: [
+                    "<strong>Keyword Collector:</strong> Prefix ** collects arbitrary key=val pairs into dictionary."
+                ],
+                code: `def display_profile(**details):
+    for key, val in details.items():
+        print(f"{key}: {val}")
+
+display_profile(name="Rahul", age=15, city="Patna")`,
+                output: "name: Rahul\nage: 15\ncity: Patna"
+            },
+            {
+                id: 57,
+                title: "Lambda Function",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Anonymous single-expression functions syntax: lambda args: expr.",
+                notes: [
+                    "<strong>Inline Lambda:</strong> Short-lived function without formal def declaration."
+                ],
+                code: `square = lambda x: x ** 2
+add = lambda a, b: a + b
+
+print("Square of 5:", square(5))
+print("Add 10 + 20:", add(10, 20))`,
+                output: "Square of 5: 25\nAdd 10 + 20: 30"
+            },
+            {
+                id: 58,
+                title: "Map()",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Applying a function transform to every item of an iterable.",
+                notes: [
+                    "<strong>Lazy Map Iterator:</strong> Returns map object, converted with list()."
+                ],
+                code: `numbers = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x ** 2, numbers))
+
+print("Mapped Squares:", squared)`,
+                output: "Mapped Squares: [1, 4, 9, 16, 25]"
+            },
+            {
+                id: 59,
+                title: "Filter()",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Filtering iterable elements based on boolean predicate test.",
+                notes: [
+                    "<strong>Predicate Filtering:</strong> Retains items where function returns True."
+                ],
+                code: `numbers = [10, 15, 20, 25, 30]
+evens = list(filter(lambda x: x % 2 == 0, numbers))
+
+print("Filtered Evens:", evens)`,
+                output: "Filtered Evens: [10, 20, 30]"
+            },
+            {
+                id: 60,
+                title: "Zip()",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Aggregating elements from multiple iterables element-wise.",
+                notes: [
+                    "<strong>Pairing Streams:</strong> Stops when shortest input iterable is exhausted."
+                ],
+                code: `names = ["Rahul", "Aman", "Priya"]
+scores = [85, 90, 88]
+
+for name, score in zip(names, scores):
+    print(f"{name}: {score} marks")`,
+                output: "Rahul: 85 marks\nAman: 90 marks\nPriya: 88 marks"
+            },
+            {
+                id: 61,
+                title: "Enumerate()",
+                category: "functions",
+                group: "sec-4",
+                level: "Intermediate",
+                desc: "Looping with an automatic index counter.",
+                notes: [
+                    "<strong>Index + Value Pair:</strong> Yields (index, item) tuple on each iteration."
+                ],
+                code: `students = ["Rahul", "Aman", "Priya"]
+
+for idx, name in enumerate(students, start=1):
+    print(f"Rank #{idx}: {name}")`,
+                output: "Rank #1: Rahul\nRank #2: Aman\nRank #3: Priya"
+            },
+            {
+                id: 62,
+                title: "Exception Handling",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Catching runtime errors gracefully with try-except blocks.",
+                notes: [
+                    "<strong>Prevent Crash:</strong> Catches errors without crashing the entire script.",
+                    "<strong>Specific Exceptions:</strong> Catch ValueError, ZeroDivisionError, TypeError specifically."
+                ],
+                code: `try:
+    num = int("abc")  # Invalid string
+    res = 10 / num
+except ValueError:
+    print("Handled: Invalid numeric conversion.")
+except ZeroDivisionError:
+    print("Handled: Cannot divide by zero.")`,
+                output: "Handled: Invalid numeric conversion."
+            },
+            {
+                id: 63,
+                title: "Try Except Else Finally",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Complete error handling control flow.",
+                notes: [
+                    "<strong>else Block:</strong> Runs only if NO exception occurred in try block.",
+                    "<strong>finally Block:</strong> ALWAYS runs regardless of exceptions (cleanup resources)."
+                ],
+                code: `try:
+    res = 10 / 2
+except ZeroDivisionError:
+    print("Division error")
+else:
+    print("Calculation successful, result:", res)
+finally:
+    print("Cleanup: Executing finally block.")`,
+                output: "Calculation successful, result: 5.0\nCleanup: Executing finally block."
+            },
+            {
+                id: 64,
+                title: "Raising Exceptions",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Triggering custom errors with raise keyword.",
+                notes: [
+                    "<strong>Custom Validation:</strong> Enforce business logic constraints explicitly."
+                ],
+                code: `age = 15
+
+try:
+    if age < 18:
+        raise ValueError("Age restriction: Must be 18 or older.")
+except ValueError as err:
+    print("Caught Exception:", err)`,
+                output: "Caught Exception: Age restriction: Must be 18 or older."
+            },
+            {
+                id: 65,
+                title: "File Handling - Write",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Writing data to files using context manager with open().",
+                notes: [
+                    "<strong>Context Manager 'with':</strong> Guarantees file is closed automatically after block exits.",
+                    "<strong>Mode 'w':</strong> Overwrites file if exists or creates new."
+                ],
+                code: `with open("student.txt", "w") as file:
+    file.write("Name: Rahul\\n")
+    file.write("Class: 8\\n")
+
+print("File written successfully using context manager.")`,
+                output: "File written successfully using context manager."
+            },
+            {
+                id: 66,
+                title: "File Handling - Read",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Reading text content from stored files.",
+                notes: [
+                    "<strong>read():</strong> Reads whole file as single string.",
+                    "<strong>readline():</strong> Reads single line."
+                ],
+                code: `with open("student.txt", "r") as file:
+    content = file.read()
+    print("File Content:\\n" + content.strip())`,
+                output: "File Content:\nName: Rahul\nClass: 8"
+            },
+            {
+                id: 67,
+                title: "File Handling - Append",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Appending data to existing file without overwriting.",
+                notes: [
+                    "<strong>Mode 'a':</strong> Preserves old content and appends new lines at file end."
+                ],
+                code: `with open("student.txt", "a") as file:
+    file.write("Subject: Computer Science\\n")
+
+print("Content appended successfully.")`,
+                output: "Content appended successfully."
+            },
+            {
+                id: 68,
+                title: "Working with File Lines",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Iterating line-by-line over files efficiently.",
+                notes: [
+                    "<strong>Memory Efficient Iteration:</strong> Iterating over file object directly streams line by line."
+                ],
+                code: `with open("student.txt", "r") as file:
+    for line_no, line in enumerate(file, 1):
+        print(f"Line {line_no}: {line.strip()}")`,
+                output: "Line 1: Name: Rahul\nLine 2: Class: 8\nLine 3: Subject: Computer Science"
+            },
+            {
+                id: 69,
+                title: "Module",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Importing built-in or custom .py code modules.",
+                notes: [
+                    "<strong>Code Organization:</strong> Splitting program into modular reusable files."
+                ],
+                code: `import math
+
+print("Square root of 25:", math.sqrt(25))
+print("Value of PI:", math.pi)`,
+                output: "Square root of 25: 5.0\nValue of PI: 3.141592653589793"
+            },
+            {
+                id: 70,
+                title: "Random Module",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Generating pseudo-random numbers and choices.",
+                notes: [
+                    "<strong>randint(a, b):</strong> Random integer in range [a, b].",
+                    "<strong>choice(seq):</strong> Selects random item from collection."
+                ],
+                code: `import random
+
+rand_num = random.randint(1, 100)
+sample_choice = random.choice(["Apple", "Banana", "Cherry"])
+
+print("Random Integer:", rand_num)
+print("Random Choice:", sample_choice)`,
+                output: "Random Integer: 42\nRandom Choice: Banana"
+            },
+            {
+                id: 71,
+                title: "Date and Time",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Manipulating timestamps with datetime module.",
+                notes: [
+                    "<strong>strftime():</strong> Format date object into custom text string."
+                ],
+                code: `from datetime import datetime
+
+now = datetime.now()
+formatted = now.strftime("%Y-%m-%d %H:%M:%S")
+
+print("Formatted Datetime:", formatted)`,
+                output: "Formatted Datetime: 2026-09-29 11:45:00"
+            },
+            {
+                id: 72,
+                title: "Class & OOP Intro",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Blueprints for creating user-defined objects.",
+                notes: [
+                    "<strong>Object-Oriented Programming:</strong> Encapsulates state (attributes) and behavior (methods).",
+                    "<strong>self Parameter:</strong> Refers to current instance of class."
+                ],
+                code: `class Student:
+    def greet(self):
+        print("Hello! I am a student instance.")
+
+# Instantiate class
+student1 = Student()
+student1.greet()`,
+                output: "Hello! I am a student instance."
+            },
+            {
+                id: 73,
+                title: "Class Constructor",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Initializing instance state via __init__() constructor method.",
+                notes: [
+                    "<strong>__init__() Dunder Method:</strong> Called automatically upon object creation."
+                ],
+                code: `class Student:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def display(self):
+        print(f"Student: {self.name}, Age: {self.age}")
+
+s1 = Student("Rahul", 15)
+s1.display()`,
+                output: "Student: Rahul, Age: 15"
+            },
+            {
+                id: 74,
+                title: "Instance Variables",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Unique attribute storage attached to individual object instances.",
+                notes: [
+                    "<strong>Instance Attribute:</strong> Attached to self inside __init__."
+                ],
+                code: `class Car:
+    def __init__(self, brand, color):
+        self.brand = brand
+        self.color = color
+
+c1 = Car("Toyota", "Red")
+c2 = Car("Tesla", "White")
+
+print(f"Car 1: {c1.brand} ({c1.color})")
+print(f"Car 2: {c2.brand} ({c2.color})")`,
+                output: "Car 1: Toyota (Red)\nCar 2: Tesla (White)"
+            },
+            {
+                id: 75,
+                title: "Class Method",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Methods bound to class state decorated with @classmethod.",
+                notes: [
+                    "<strong>cls Argument:</strong> Receives class object cls instead of instance self."
+                ],
+                code: `class Student:
+    school_name = "Delhi Public School"
+
+    @classmethod
+    def get_school(cls):
+        return cls.school_name
+
+print("School Name:", Student.get_school())`,
+                output: "School Name: Delhi Public School"
+            },
+            {
+                id: 76,
+                title: "Static Method",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Independent utility functions inside class decorated with @staticmethod.",
+                notes: [
+                    "<strong>No Implicit Arg:</strong> Doesn't require self or cls parameters."
+                ],
+                code: `class MathUtil:
+    @staticmethod
+    def is_even(num):
+        return num % 2 == 0
+
+print("Is 10 even?:", MathUtil.is_even(10))`,
+                output: "Is 10 even?: True"
+            },
+            {
+                id: 77,
+                title: "Inheritance",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Child class inheriting methods and attributes from parent class.",
+                notes: [
+                    "<strong>Code Reuse:</strong> Subclass inherits parent functionality."
+                ],
+                code: `class Animal:
+    def speak(self):
+        print("Animal sound")
+
+class Dog(Animal):
+    def bark(self):
+        print("Dog barks")
+
+d = Dog()
+d.speak()  # Inherited
+d.bark()`,
+                output: "Animal sound\nDog barks"
+            },
+            {
+                id: 78,
+                title: "Method Overriding",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Redefining inherited parent method inside subclass.",
+                notes: [
+                    "<strong>Polymorphism:</strong> Subclass provides specialized implementation."
+                ],
+                code: `class Animal:
+    def make_sound(self):
+        print("Generic animal noise")
+
+class Cat(Animal):
+    def make_sound(self):
+        print("Meow!")
+
+c = Cat()
+c.make_sound()`,
+                output: "Meow!"
+            },
+            {
+                id: 79,
+                title: "Multiple Inheritance",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Inheriting features from more than one parent base class.",
+                notes: [
+                    "<strong>Method Resolution Order (MRO):</strong> Determines lookup sequence."
+                ],
+                code: `class Father:
+    def father_skill(self):
+        print("Gardening")
+
+class Mother:
+    def mother_skill(self):
+        print("Painting")
+
+class Child(Father, Mother):
+    pass
+
+c = Child()
+c.father_skill()
+c.mother_skill()`,
+                output: "Gardening\nPainting"
+            },
+            {
+                id: 80,
+                title: "Encapsulation",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Restricting attribute access using private variable prefix (__).",
+                notes: [
+                    "<strong>Name Mangling:</strong> Prefixing attribute with __ makes it private."
+                ],
+                code: `class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance  # Private
+
+    def deposit(self, amount):
+        self.__balance += amount
+
+    def get_balance(self):
+        return self.__balance
+
+acc = BankAccount(1000)
+acc.deposit(500)
+print("Balance:", acc.get_balance())`,
+                output: "Balance: 1500"
+            },
+            {
+                id: 81,
+                title: "Property Decorator",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Getter and setter properties for clean attribute syntax.",
+                notes: [
+                    "<strong>@property:</strong> Converts method call into attribute-like access."
+                ],
+                code: `class Student:
+    def __init__(self, name):
+        self._name = name
+
+    @property
+    def name(self):
+        return self._name.upper()
+
+s = Student("rahul")
+print("Property getter name:", s.name)`,
+                output: "Property getter name: RAHUL"
+            },
+            {
+                id: 82,
+                title: "Iterator",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Traversing collection items using iter() and next().",
+                notes: [
+                    "<strong>StopIteration:</strong> Exception raised when no elements remain."
+                ],
+                code: `items = [10, 20, 30]
+it = iter(items)
+
+print(next(it))
+print(next(it))
+print(next(it))`,
+                output: "10\n20\n30"
+            },
+            {
+                id: 83,
+                title: "Generator",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Functions yielding values lazily using yield keyword.",
+                notes: [
+                    "<strong>Lazy Evaluation:</strong> Generates values on demand saving memory."
+                ],
+                code: `def count_up_to(max_val):
+    count = 1
+    while count <= max_val:
+        yield count
+        count += 1
+
+for val in count_up_to(3):
+    print("Generator Yield:", val)`,
+                output: "Generator Yield: 1\nGenerator Yield: 2\nGenerator Yield: 3"
+            },
+            {
+                id: 84,
+                title: "Decorator",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Wrapping functions to add features dynamically without modifying source code.",
+                notes: [
+                    "<strong>@decorator_name:</strong> High-order wrapper function pattern."
+                ],
+                code: `def my_decorator(func):
+    def wrapper():
+        print("--> Before Function Call")
+        func()
+        print("--> After Function Call")
+    return wrapper
+
+@my_decorator
+def say_hello():
+    print("Hello from Decorated Function!")
+
+say_hello()`,
+                output: "--> Before Function Call\nHello from Decorated Function!\n--> After Function Call"
+            },
+            {
+                id: 85,
+                title: "Context Manager",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Resource setup and teardown management using 'with' block.",
+                notes: [
+                    "<strong>__enter__ and __exit__:</strong> Dunder protocol managing setup/teardown."
+                ],
+                code: `with open("temp.txt", "w") as f:
+    f.write("Temporary Context Data")
+
+print("File closed automatically after exiting block.")`,
+                output: "File closed automatically after exiting block."
+            },
+            {
+                id: 86,
+                title: "Regular Expression",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Pattern matching text using built-in re module.",
+                notes: [
+                    "<strong>re.search():</strong> Finds pattern match in text."
+                ],
+                code: `import re
+
+text = "Contact: 9876543210 for support"
+match = re.search(r"\\d{10}", text)
+
+if match:
+    print("Extracted Phone Number:", match.group())`,
+                output: "Extracted Phone Number: 9876543210"
+            },
+            {
+                id: 87,
+                title: "JSON Processing",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Parsing and generating JSON data via json.dumps() and json.loads().",
+                notes: [
+                    "<strong>dumps():</strong> Python dict -> JSON string.",
+                    "<strong>loads():</strong> JSON string -> Python dict."
+                ],
+                code: `import json
+
+student_dict = {"name": "Rahul", "marks": 85}
+json_str = json.dumps(student_dict)
+
+print("JSON String:", json_str)
+print("Parsed Back Dict:", json.loads(json_str))`,
+                output: 'JSON String: {"name": "Rahul", "marks": 85}\nParsed Back Dict: {\'name\': \'Rahul\', \'marks\': 85}'
+            },
+            {
+                id: 88,
+                title: "Sorted with Custom Key",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Sorting complex structures using key lambda functions.",
+                notes: [
+                    "<strong>key parameter:</strong> Function extracting sort key from objects."
+                ],
+                code: `students = [
+    {"name": "Rahul", "marks": 85},
+    {"name": "Aman", "marks": 92},
+    {"name": "Priya", "marks": 88}
+]
+
+# Sort by marks descending
+students.sort(key=lambda s: s["marks"], reverse=True)
+print("Top Scorer:", students[0])`,
+                output: "Top Scorer: {'name': 'Aman', 'marks': 92}"
+            },
+            {
+                id: 89,
+                title: "Recursion",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Functions calling themselves to solve smaller problem instances.",
+                notes: [
+                    "<strong>Base Case:</strong> Prevents infinite recursion depth crashes."
+                ],
+                code: `def factorial(n):
+    if n <= 1:
+        return 1
+    return n * factorial(n - 1)
+
+print("Factorial of 5:", factorial(5))`,
+                output: "Factorial of 5: 120"
+            },
+            {
+                id: 90,
+                title: "Type Hints",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Adding static type annotations to parameters and return types.",
+                notes: [
+                    "<strong>PEP 484:</strong> Type annotations improve code editor auto-complete and linting."
+                ],
+                code: `def add_numbers(a: int, b: int) -> int:
+    return a + b
+
+res: int = add_numbers(10, 20)
+print("Type-Annotated Result:", res)`,
+                output: "Type-Annotated Result: 30"
+            },
+            {
+                id: 91,
+                title: "Dataclass",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Auto-generating init, repr, and eq methods for data classes.",
+                notes: [
+                    "<strong>@dataclass:</strong> Reduces class boilerplate significantly."
+                ],
+                code: `from dataclasses import dataclass
+
+@dataclass
+class Student:
+    name: str
+    age: int
+    grade: int
+
+s = Student("Rahul", 15, 8)
+print("Dataclass Repr:", s)`,
+                output: "Dataclass Repr: Student(name='Rahul', age=15, grade=8)"
+            },
+            {
+                id: 92,
+                title: "Virtual Environment",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Isolated Python package environment management.",
+                notes: [
+                    "<strong>Creation:</strong> python -m venv myenv",
+                    "<strong>Activation:</strong> myenv\\Scripts\\activate (Win) or source myenv/bin/activate (Linux/Mac)."
+                ],
+                code: `print("Virtual environment workflow commands ready.")`,
+                output: "Virtual environment workflow commands ready."
+            },
+            {
+                id: 93,
+                title: "PIP Package Manager",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Installing third-party packages from PyPI.",
+                notes: [
+                    "<strong>Commands:</strong> pip install <pkg>, pip freeze > requirements.txt."
+                ],
+                code: `print("PIP command reference ready.")`,
+                output: "PIP command reference ready."
+            },
+            {
+                id: 94,
+                title: "Command Line Arguments",
+                category: "advanced",
+                group: "sec-5",
+                level: "Advanced",
+                desc: "Parsing terminal arguments with sys.argv.",
+                notes: [
+                    "<strong>sys.argv:</strong> List containing script name and positional CLI flags."
+                ],
+                code: `import sys
+print("CLI Arguments List:", sys.argv[0])`,
+                output: "CLI Arguments List: main.py"
+            },
+            {
+                id: 95,
+                title: "Simple Calculator Project",
+                category: "projects",
+                group: "sec-6",
+                level: "Project",
+                desc: "Interactive CLI arithmetic calculator supporting +, -, *, /.",
+                notes: [
+                    "<strong>Project Scope:</strong> Interactive logic checking arithmetic inputs."
+                ],
+                code: `def calculator(a, operator, b):
+    if operator == "+": return a + b
+    elif operator == "-": return a - b
+    elif operator == "*": return a * b
+    elif operator == "/": return a / b if b != 0 else "Error"
+    return "Invalid"
+
+print("10 + 5 =", calculator(10, "+", 5))
+print("20 / 4 =", calculator(20, "/", 4))`,
+                output: "10 + 5 = 15\n20 / 4 = 5.0",
+                interactiveWidget: "calc"
+            },
+            {
+                id: 96,
+                title: "Number Guessing Game",
+                category: "projects",
+                group: "sec-6",
+                level: "Project",
+                desc: "Interactive random number guessing game loop.",
+                notes: [
+                    "<strong>Project Scope:</strong> Loop evaluation testing higher/lower guesses."
+                ],
+                code: `def check_guess(guess, secret):
+    if guess == secret: return "Correct!"
+    elif guess < secret: return "Higher"
+    else: return "Lower"
+
+print("Guess 5 vs Secret 7:", check_guess(5, 7))`,
+                output: "Guess 5 vs Secret 7: Higher",
+                interactiveWidget: "game"
+            },
+            {
+                id: 97,
+                title: "Student Marks Project",
+                category: "projects",
+                group: "sec-6",
+                level: "Project",
+                desc: "Grade computation report system.",
+                notes: [
+                    "<strong>Project Scope:</strong> Computes student averages and grades."
+                ],
+                code: `def generate_report(name, marks):
+    total = sum(marks)
+    pct = total / len(marks)
+    grade = "A+" if pct >= 90 else "A"
+    return f"{name}: Total {total}, {pct:.1f}% -> Grade {grade}"
+
+print(generate_report("Rahul", [85, 90, 88]))`,
+                output: "Rahul: Total 263, 87.7% -> Grade A",
+                interactiveWidget: "marks"
+            },
+            {
+                id: 98,
+                title: "Important Python Keywords",
+                category: "projects",
+                group: "sec-6",
+                level: "Reference",
+                desc: "Complete reference list of Python reserved keywords.",
+                notes: [
+                    "<strong>Reserved Identifiers:</strong> Cannot be used as variable names."
+                ],
+                code: `import keyword
+print("Total Keywords:", len(keyword.kwlist))
+print("Sample Keywords:", keyword.kwlist[:10])`,
+                output: "Total Keywords: 35\nSample Keywords: ['False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await', 'break', 'class']"
+            },
+            {
+                id: 99,
+                title: "Python Quick Revision",
+                category: "projects",
+                group: "sec-6",
+                level: "Reference",
+                desc: "Cheat sheet overview of essential concepts.",
+                notes: [
+                    "<strong>Summary:</strong> High-level recap for fast exam or interview revision."
+                ],
+                code: `print("Python Core Quick Revision Cheat Sheet Ready!")`,
+                output: "Python Core Quick Revision Cheat Sheet Ready!"
+            },
+            {
+                id: 100,
+                title: "Final Masterclass Summary",
+                category: "projects",
+                group: "sec-6",
+                level: "Reference",
+                desc: "Congratulations on completing all 100 modular Python topics!",
+                notes: [
+                    "<strong>Next Steps:</strong> Build real-world projects, contribute to open source, and practice algorithms."
+                ],
+                code: `print("========================================")
+print("     100 PYTHON TOPICS COMPLETED!")
+print("========================================")
+print("Keep Coding & Building Awesome Software!")`,
+                output: "========================================\n     100 PYTHON TOPICS COMPLETED!\n========================================"
+            }
+        ];
+    </script>
+
+    <script>
+        let starredTopics = JSON.parse(localStorage.getItem('pyStarredTopics') || '[]');
+        let activeFilter = 'all';
+
+        function saveStarred() {
+            localStorage.setItem('pyStarredTopics', JSON.stringify(starredTopics));
+            updateStarredBadge();
+        }
+
+        function updateStarredBadge() {
+            const badge = document.getElementById('starredBadge');
+            if (starredTopics.length > 0) {
+                badge.innerText = starredTopics.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        // Custom lightweight syntax highlighter for python snippets
+        function highlightSyntax(code) {
+            let escaped = code.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            
+            // Strings
+            escaped = escaped.replace(/(".*?"|'.*?'|""".*?"""|'''.*?''')/gs, '<span class="py-str">$1</span>');
+            
+            // Comments
+            escaped = escaped.replace(/(#.*$)/gm, '<span class="py-comment">$1</span>');
+            
+            // Keywords
+            const keywords = ['def', 'return', 'if', 'elif', 'else', 'for', 'while', 'in', 'import', 'from', 'as', 'class', 'try', 'except', 'finally', 'raise', 'with', 'pass', 'break', 'continue', 'lambda', 'yield', 'True', 'False', 'None', 'and', 'or', 'not', 'is'];
+            keywords.forEach(kw => {
+                const regex = new RegExp(`\\b(${kw})\\b`, 'g');
+                escaped = escaped.replace(regex, '<span class="py-keyword">$1</span>');
+            });
+
+            // Functions
+            escaped = escaped.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)(?=\()/g, '<span class="py-func">$1</span>');
+            
+            // Numbers
+            escaped = escaped.replace(/\b(\d+\.?\d*)\b/g, '<span class="py-num">$1</span>');
+
+            return escaped;
+        }
+
+        // Render card function with embedded detailed topic notes
+        function createTopicCard(topic) {
+            const isStarred = starredTopics.includes(topic.id);
+            const card = document.createElement('div');
+            card.className = `topic-card glass-panel rounded-2xl border border-slate-800/80 p-5 sm:p-6 shadow-xl transition-all duration-300 hover:border-slate-700/80 hover:shadow-2xl hover:shadow-sky-500/5 group`;
+            card.id = `topic-${topic.id}`;
+            card.dataset.group = topic.group;
+            card.dataset.cat = topic.category;
+
+            // Notes list HTML
+            let notesListHTML = '';
+            if (topic.notes && topic.notes.length > 0) {
+                notesListHTML = `
+                <div class="mt-4 p-4 rounded-xl bg-slate-900/80 border border-slate-800/80">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-sky-400 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap"></i> Topic Notes & Key Takeaways
+                    </h4>
+                    <ul class="space-y-1.5 text-xs text-slate-300 leading-relaxed list-disc list-inside">
+                        ${topic.notes.map(note => `<li>${note}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            // Interactive widgets
+            let interactiveHTML = '';
+            if (topic.interactiveWidget === 'calc') {
+                interactiveHTML = `
+                <div class="mt-4 p-4 rounded-xl bg-slate-900/90 border border-sky-500/30">
+                    <div class="text-xs font-semibold text-sky-400 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-calculator"></i> Try Live Calculator
+                    </div>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <input type="number" id="calcNum1" value="12" class="w-20 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-sm text-center">
+                        <select id="calcOp" class="bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-sm text-sky-400 font-bold">
+                            <option value="+">+</option>
+                            <option value="-">-</option>
+                            <option value="*">*</option>
+                            <option value="/">/</option>
+                        </select>
+                        <input type="number" id="calcNum2" value="4" class="w-20 bg-slate-950 border border-slate-700 rounded-lg px-2 py-1 text-sm text-center">
+                        <button onclick="runInteractiveCalc(${topic.id})" class="px-3 py-1 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-semibold transition">Calculate</button>
+                        <span id="calcResult" class="text-sm font-bold text-emerald-400 ml-auto">= 16.0</span>
+                    </div>
+                </div>`;
+            } else if (topic.interactiveWidget === 'game') {
+                interactiveHTML = `
+                <div class="mt-4 p-4 rounded-xl bg-slate-900/90 border border-indigo-500/30">
+                    <div class="text-xs font-semibold text-indigo-400 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-gamepad"></i> Play Guessing Game (1 - 10)
+                    </div>
+                    <div class="flex gap-2 items-center">
+                        <input type="number" id="gameGuessInput" placeholder="1-10" min="1" max="10" class="w-24 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1 text-sm">
+                        <button onclick="runGuessingGame()" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition">Guess</button>
+                        <span id="gameOutput" class="text-xs font-medium text-amber-300 ml-2">Enter number to start!</span>
+                    </div>
+                </div>`;
+            } else if (topic.interactiveWidget === 'marks') {
+                interactiveHTML = `
+                <div class="mt-4 p-4 rounded-xl bg-slate-900/90 border border-emerald-500/30">
+                    <div class="text-xs font-semibold text-emerald-400 mb-2 flex items-center gap-1.5">
+                        <i class="fa-solid fa-graduation-cap"></i> Dynamic Marks & Grade Calculator
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mb-2">
+                        <input type="number" id="m1" value="85" placeholder="Sub 1" class="bg-slate-950 border border-slate-700 rounded-lg p-1 text-xs text-center">
+                        <input type="number" id="m2" value="90" placeholder="Sub 2" class="bg-slate-950 border border-slate-700 rounded-lg p-1 text-xs text-center">
+                        <input type="number" id="m3" value="88" placeholder="Sub 3" class="bg-slate-950 border border-slate-700 rounded-lg p-1 text-xs text-center">
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <button onclick="runMarksCalc()" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition">Compute Grade</button>
+                        <span id="marksResult" class="text-xs font-bold text-emerald-300">Total: 263 | 87.7% (Grade A)</span>
+                    </div>
+                </div>`;
+            }
+
+            card.innerHTML = `
+                <!-- Card Header -->
+                <div class="flex items-start justify-between gap-3 mb-2">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700/80 text-sky-400 font-mono text-xs font-bold flex items-center justify-center shrink-0">
+                            #${topic.id}
+                        </span>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-bold text-slate-100 group-hover:text-sky-300 transition">
+                                    ${topic.title}
+                                </h3>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">${topic.level || 'Core'}</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">${topic.desc}</p>
+                        </div>
+                    </div>
+                    <button class="star-btn p-2 text-slate-500 hover:text-amber-400 transition" data-id="${topic.id}" title="Save bookmark">
+                        <i class="${isStarred ? 'fa-solid text-amber-400' : 'fa-regular'} fa-star text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Theory Notes Section -->
+                ${notesListHTML}
+
+                <!-- Code Block -->
+                <div class="relative rounded-xl bg-slate-950 border border-slate-800/90 overflow-hidden mt-4">
+                    <div class="flex items-center justify-between px-4 py-2 bg-slate-900/90 border-b border-slate-800/80">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span>
+                            <span class="text-xs text-slate-400 font-mono ml-2">main.py</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="run-btn text-xs px-2.5 py-1 rounded-md bg-emerald-600/20 text-emerald-300 hover:bg-emerald-600/30 border border-emerald-500/30 font-medium transition flex items-center gap-1.5" data-id="${topic.id}">
+                                <i class="fa-solid fa-play text-[10px]"></i> Run Output
+                            </button>
+                            <button class="copy-btn text-xs px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:bg-slate-700 font-medium transition flex items-center gap-1.5" data-id="${topic.id}">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+
+                    <pre class="p-4 text-xs sm:text-sm text-slate-200 overflow-x-auto leading-relaxed"><code>${highlightSyntax(topic.code)}</code></pre>
+
+                    <!-- Console Terminal Output -->
+                    <div id="output-${topic.id}" class="hidden border-t border-slate-800 bg-slate-950/90 p-3.5 font-mono text-xs">
+                        <div class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1 flex items-center gap-1">
+                            <i class="fa-solid fa-terminal text-sky-400"></i> Terminal Output:
+                        </div>
+                        <div class="text-emerald-400 whitespace-pre-wrap leading-relaxed">${topic.output}</div>
+                    </div>
+                </div>
+
+                ${interactiveHTML}
+            `;
+
+            return card;
+        }
+
+        function renderDrawerLinks(list) {
+            const drawerList = document.getElementById('drawerList');
+            drawerList.innerHTML = '';
+            list.forEach(t => {
+                const a = document.createElement('a');
+                a.href = `#topic-${t.id}`;
+                a.className = "drawer-item flex items-center justify-between px-3 py-2 rounded-xl text-xs text-slate-300 hover:bg-slate-800 hover:text-sky-400 transition";
+                a.innerHTML = `
+                    <span class="truncate"><strong class="text-sky-500 font-mono mr-2">#${t.id}</strong>${t.title}</span>
+                    <i class="fa-solid fa-chevron-right text-[10px] text-slate-600"></i>
+                `;
+                a.addEventListener('click', () => {
+                    closeDrawer();
+                });
+                drawerList.appendChild(a);
+            });
+        }
+
+        function renderAllTopics(filterGroup = 'all', searchQuery = '') {
+            const container = document.getElementById('topicsContainer');
+            container.innerHTML = '';
+
+            let filtered = pythonNotesData;
+
+            if (filterGroup === 'starred') {
+                filtered = filtered.filter(t => starredTopics.includes(t.id));
+            } else if (filterGroup !== 'all') {
+                filtered = filtered.filter(t => t.group === filterGroup);
+            }
+
+            if (searchQuery.trim() !== '') {
+                const q = searchQuery.toLowerCase();
+                filtered = filtered.filter(t => 
+                    t.title.toLowerCase().includes(q) || 
+                    t.desc.toLowerCase().includes(q) || 
+                    t.code.toLowerCase().includes(q) ||
+                    (t.notes && t.notes.some(n => n.toLowerCase().includes(q)))
+                );
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 glass-panel rounded-2xl max-w-md mx-auto">
+                        <i class="fa-solid fa-magnifying-glass text-4xl text-slate-600 mb-3"></i>
+                        <h3 class="text-lg font-bold text-slate-300">No matching topics found</h3>
+                        <p class="text-xs text-slate-500 mt-1">Try searching another keyword or resetting active filters.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(topic => {
+                container.appendChild(createTopicCard(topic));
+            });
+
+            attachCardEventListeners();
+        }
+
+        function attachCardEventListeners() {
+            // Star/Bookmark toggle
+            document.querySelectorAll('.star-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.dataset.id);
+                    if (starredTopics.includes(id)) {
+                        starredTopics = starredTopics.filter(item => item !== id);
+                        showToast("Removed from saved bookmarks", "info");
+                    } else {
+                        starredTopics.push(id);
+                        showToast("Saved to bookmarks!", "success");
+                    }
+                    saveStarred();
+                    const icon = btn.querySelector('i');
+                    if (starredTopics.includes(id)) {
+                        icon.className = 'fa-solid fa-star text-amber-400 text-lg';
+                    } else {
+                        icon.className = 'fa-regular fa-star text-lg';
+                    }
+                });
+            });
+
+            // Copy code
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.dataset.id);
+                    const topic = pythonNotesData.find(t => t.id === id);
+                    if (topic) {
+                        navigator.clipboard.writeText(topic.code).then(() => {
+                            showToast("Python code copied to clipboard!", "success");
+                        }).catch(() => {
+                            const dummy = document.createElement("textarea");
+                            document.body.appendChild(dummy);
+                            dummy.value = topic.code;
+                            dummy.select();
+                            document.execCommand("copy");
+                            document.body.removeChild(dummy);
+                            showToast("Python code copied to clipboard!", "success");
+                        });
+                    }
+                });
+            });
+
+            // Run output button
+            document.querySelectorAll('.run-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.dataset.id);
+                    const outDiv = document.getElementById(`output-${id}`);
+                    if (outDiv) {
+                        outDiv.classList.toggle('hidden');
+                    }
+                });
+            });
+        }
+
+        function runInteractiveCalc(id) {
+            const num1 = parseFloat(document.getElementById('calcNum1').value) || 0;
+            const num2 = parseFloat(document.getElementById('calcNum2').value) || 0;
+            const op = document.getElementById('calcOp').value;
+            let res = 0;
+            if (op === '+') res = num1 + num2;
+            else if (op === '-') res = num1 - num2;
+            else if (op === '*') res = num1 * num2;
+            else if (op === '/') res = num2 !== 0 ? (num1 / num2).toFixed(2) : 'Error (Div by 0)';
+            document.getElementById('calcResult').innerText = `= ${res}`;
+        }
+
+        let gameSecret = Math.floor(Math.random() * 10) + 1;
+        function runGuessingGame() {
+            const input = document.getElementById('gameGuessInput');
+            const output = document.getElementById('gameOutput');
+            const guess = parseInt(input.value);
+            if (!guess) {
+                output.innerText = "Please enter a valid number!";
+                output.className = "text-xs font-medium text-rose-400 ml-2";
+                return;
+            }
+            if (guess === gameSecret) {
+                output.innerText = "🎉 Correct! You won! Resetting number...";
+                output.className = "text-xs font-bold text-emerald-400 ml-2";
+                gameSecret = Math.floor(Math.random() * 10) + 1;
+            } else if (guess < gameSecret) {
+                output.innerText = "📈 Try a higher number!";
+                output.className = "text-xs font-medium text-amber-300 ml-2";
+            } else {
+                output.innerText = "📉 Try a lower number!";
+                output.className = "text-xs font-medium text-sky-300 ml-2";
+            }
+        }
+
+        function runMarksCalc() {
+            const m1 = parseFloat(document.getElementById('m1').value) || 0;
+            const m2 = parseFloat(document.getElementById('m2').value) || 0;
+            const m3 = parseFloat(document.getElementById('m3').value) || 0;
+            const total = m1 + m2 + m3;
+            const pct = (total / 3).toFixed(1);
+            let grade = 'D';
+            if (pct >= 90) grade = 'A+';
+            else if (pct >= 80) grade = 'A';
+            else if (pct >= 70) grade = 'B';
+            else if (pct >= 60) grade = 'C';
+            document.getElementById('marksResult').innerText = `Total: ${total} | ${pct}% (Grade ${grade})`;
+        }
+
+        // Toast Handler
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMessage.innerText = message;
+            if (type === 'success') {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+            } else {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-info text-sky-400"></i>`;
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // Drawer logic
+        const drawer = document.getElementById('topicDrawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+
+        function openDrawer() {
+            drawerOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                drawerOverlay.classList.remove('opacity-0');
+                drawer.classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        function closeDrawer() {
+            drawer.classList.add('translate-x-full');
+            drawerOverlay.classList.add('opacity-0');
+            setTimeout(() => {
+                drawerOverlay.classList.add('hidden');
+            }, 300);
+        }
+
+        document.getElementById('toggleDrawerBtn').addEventListener('click', openDrawer);
+        document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
+        drawerOverlay.addEventListener('click', closeDrawer);
+
+        // Category drawer filters
+        document.querySelectorAll('.category-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-filter-btn').forEach(b => {
+                    b.classList.remove('bg-brand-600', 'text-white');
+                    b.classList.add('text-slate-400');
+                });
+                btn.classList.add('bg-brand-600', 'text-white');
+                btn.classList.remove('text-slate-400');
+
+                const cat = btn.dataset.cat;
+                if (cat === 'all') {
+                    renderDrawerLinks(pythonNotesData);
+                } else {
+                    renderDrawerLinks(pythonNotesData.filter(t => t.category === cat));
+                }
+            });
+        });
+
+        // Pill bar group filters
+        document.querySelectorAll('.pill-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pill-btn').forEach(b => {
+                    b.classList.remove('bg-sky-500', 'text-white', 'shadow-lg', 'shadow-sky-500/20');
+                    b.classList.add('bg-slate-900', 'text-slate-300');
+                });
+                btn.classList.add('bg-sky-500', 'text-white', 'shadow-lg', 'shadow-sky-500/20');
+                btn.classList.remove('bg-slate-900', 'text-slate-300');
+
+                const group = btn.dataset.group;
+                activeFilter = group;
+                renderAllTopics(group, document.getElementById('searchInput').value);
+            });
+        });
+
+        // Search Input Handling
+        const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (val.length > 0) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            renderAllTopics(activeFilter, val);
+        });
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            clearSearchBtn.classList.add('hidden');
+            renderAllTopics(activeFilter, '');
+        });
+
+        // Starred Bookmark Filter toggle
+        document.getElementById('starredOnlyBtn').addEventListener('click', () => {
+            renderAllTopics('starred', searchInput.value);
+            showToast("Showing saved bookmarks", "info");
+        });
+
+        // Reading progress & Back to top scroll listener
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+
+            const backToTop = document.getElementById('backToTop');
+            if (winScroll > 400) {
+                backToTop.classList.remove('opacity-0', 'translate-y-10');
+                backToTop.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                backToTop.classList.add('opacity-0', 'translate-y-10');
+                backToTop.classList.remove('opacity-100', 'translate-y-0');
+            }
+        });
+
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Initialize App
+        window.onload = function() {
+            updateStarredBadge();
+            renderDrawerLinks(pythonNotesData);
+            renderAllTopics('all', '');
+        };
+    </script>
+</body>
+</html>
